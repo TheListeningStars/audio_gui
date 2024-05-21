@@ -1,29 +1,20 @@
 #PEM PASS PHRASE HELLOW WORLD
 from subprocess import run, PIPE
 import marvin
-from flask import logging, Flask, render_template, request, Response
+from flask import Flask, render_template, request, send_from_directory, send_file, redirect, session
 import os
-from flask import Flask, flash, request, redirect, url_for,send_from_directory, send_file
-from werkzeug.utils import secure_filename
-from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
 from openai import OpenAI
-import openai
-from utils import text_to_wav, saveAllAudio, saveAllText
+from utils import text_to_wav, saveAllAudio
 import time
-import shutil
 
 
-from flask import Flask, jsonify
+from flask import Flask
 
 
 
 
 MAXLENGTH = 2
-
-
-
-UPLOAD_FOLDER = '/Users/arshshah/Desktop/Coding/Personal Projects/spanishProj/webpageFlask/audio_gui/uploadDir'
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -75,8 +66,6 @@ def audio():
     with open(newPath, 'wb') as f:
         f.write(request.data)
 
-    #chopping block
-    proc = run(['ffprobe', '-of', 'default=noprint_wrappers=1', './uploadDir/audio.wav'], text=True, stderr=PIPE)
     transcribedText = marvin.transcribe(newPath)
 
     reply = client.chat.completions.create(model="gpt-3.5-turbo",
@@ -91,7 +80,7 @@ def audio():
 
     session["turn"] +=1
 
-    return({"transcribe":f"transcribd: {transcribedText}\n return: {reply}", "audioPath":f"audioAPI/{session["name"]}-{session["turn"]}"})
+    return({"transcribe":f"transcribed: {transcribedText}\nreturn: {reply}", "audioPath":f"audioAPI/{session["name"]}-{session["turn"]}"})
     
 @app.route("/wavTry2")
 def wavTry2():
@@ -110,7 +99,8 @@ def downloadSession():
     return send_file(path, as_attachment=True)
 
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     #app.logger = logging.getLogger('audio-gui')
-    app.run(host='0.0.0.0', debug=True, port=6969, ssl_context=("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
-    #app.run(port = 4200, debug=True)
+    app.run(debug=True, ssl_context=("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
+    #app.run(port = 4200, debug=True)'''
+app.run(debug=True, ssl_context=("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
