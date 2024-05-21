@@ -14,7 +14,7 @@
 */
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
-
+const MAXLENGTH = 2;
 var audioContext = new AudioContext();
 var audioInput = null,
     realAudioInput = null,
@@ -32,18 +32,25 @@ function gotBuffers(buffers) {
 
 function doneEncoding(soundBlob) {
     // fetch('/audio', {method: "POST", body: soundBlob}).then(response => $('#output').text(response.text()))
-    fetch('/audio', {method: "POST", body: soundBlob}).then(response => response.text().then(text => {
-        document.getElementById('output').value = text;
+    //TODO ugly AF make sure fetch is pretty await most of this code should not be in fetch request
+    fetch('/audio', {method: "POST", body: soundBlob}).then(response => response.json().then(text => {
+        document.getElementById('output').value = text.transcribe;
+        document.getElementById("audioObj").src = text.audioPath
+
+        document.getElementById('start').removeAttribute('disabled');
+        recIndex++;
+        document.getElementById('turn').innerHTML = "Turn: " + recIndex;
+        if(recIndex==MAXLENGTH){window.location = window.location.origin+"/downloadSession";} 
     }));
-    recIndex++;
+    
 }
 
 function stopRecording() {
     // stop recording
     audioRecorder.stop();
     document.getElementById('stop').disabled = true;
-    document.getElementById('start').removeAttribute('disabled');
     audioRecorder.getBuffers(gotBuffers);
+
 }
 
 function startRecording() {
@@ -181,4 +188,5 @@ function unpause() {
     audioContext.resume().then(() => {
         console.log('Playback resumed successfully');
     });
+    
 }
