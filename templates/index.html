@@ -6,8 +6,10 @@
         <div class="container">
             <h1>
                 <box-icon type='solid' name='music'></box-icon>
-                Audio GUI
+                Audio GUI: Hello {{ username }}
             </h1>
+            <h1 id = "turn">Turn: 0</h1>
+            <h1 id = "logout"><a href = "/logout">Logout</a></h1>
         </div>
     </div>
 
@@ -26,5 +28,5 @@
     <script src="{{ url_for('static', filename='audiodisplay.js') }}"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 
-
+    <audio controls src="{{ audioPath }}" id="audioObj">Didn't fetch</audio>
 {% endblock %}

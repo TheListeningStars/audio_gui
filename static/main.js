@@ -14,7 +14,7 @@
 */
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
-
+const MAXLENGTH = 2;
 var audioContext = new AudioContext();
 var audioInput = null,
     realAudioInput = null,
@@ -32,10 +32,13 @@ function gotBuffers(buffers) {
 
 function doneEncoding(soundBlob) {
     // fetch('/audio', {method: "POST", body: soundBlob}).then(response => $('#output').text(response.text()))
-    fetch('/audio', {method: "POST", body: soundBlob}).then(response => response.text().then(text => {
-        document.getElementById('output').value = text;
+    fetch('/audio', {method: "POST", body: soundBlob}).then(response => response.json().then(text => {
+        document.getElementById('output').value = text.transcribe;
+        document.getElementById("audioObj").src = text.audioPath
     }));
     recIndex++;
+    document.getElementById('turn').innerHTML = "Turn: " + recIndex;
+    if(recIndex==MAXLENGTH){console.log("change"); window.location = window.location.origin+"/downloadSession";} 
 }
 
 function stopRecording() {
@@ -177,8 +180,27 @@ function initAudio() {
 window.addEventListener('load', initAudio);
 
 function unpause() {
+    getLocalStream();
     document.getElementById('init').style.display = 'none';
     audioContext.resume().then(() => {
         console.log('Playback resumed successfully');
     });
+    
 }
+
+function getLocalStream() {
+    console.log("falksj");
+    /*navigator.mediaDevices
+      .getUserMedia({ video: false, audio: true })
+      .then((stream) => {
+        window.localStream = stream;
+        window.localAudio.srcObject = stream;
+        window.localAudio.autoplay = true;
+        console.log("triedthis");
+      })
+      .catch((err) => {
+        console.error(`you got an error: ${err}`);
+      });*/
+  }
+  
+  
