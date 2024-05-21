@@ -1,15 +1,10 @@
 #PEM PASS PHRASE HELLOW WORLD
-from subprocess import run, PIPE
 import marvin
 from flask import Flask, render_template, request, send_from_directory, send_file, redirect, session
 import os
 from flask_session import Session
 from openai import OpenAI
 from utils import text_to_wav, saveAllAudio
-import time
-
-
-from flask import Flask
 
 
 
@@ -28,8 +23,6 @@ client = OpenAI()
 with open("prompt.txt", "r") as file:
     system_msg = file.read()
     file.close()
-
-
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -76,15 +69,8 @@ def audio():
     text_to_wav("es-ES-Standard-A",reply, f'./recordings/{session["name"]}/AI-{session["turn"]}.wav')
 
 
-
-
     session["turn"] +=1
-
     return({"transcribe":f"transcribed: {transcribedText}\nreturn: {reply}", "audioPath":f"audioAPI/{session["name"]}-{session["turn"]}"})
-    
-@app.route("/wavTry2")
-def wavTry2():
-    return render_template("wav.html", audioPath = "PinkPanther30.wav")
 
 @app.route("/audioAPI/<path:filename>")
 def audioAPI(filename):
@@ -93,7 +79,6 @@ def audioAPI(filename):
 
 @app.route("/downloadSession")
 def downloadSession():
-    time.sleep(10)
     saveAllAudio(f"./recordings/{session["name"]}",MAXLENGTH=MAXLENGTH)
     path = f"./recordings/{session["name"]}/finalAudio.wav"
     return send_file(path, as_attachment=True)
