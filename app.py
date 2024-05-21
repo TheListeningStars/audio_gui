@@ -103,4 +103,3 @@ def downloadSession():
     #app.logger = logging.getLogger('audio-gui')
     app.run(debug=True, ssl_context=("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
     #app.run(port = 4200, debug=True)'''
-app.run(debug=True, ssl_context=("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
