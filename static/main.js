@@ -32,21 +32,25 @@ function gotBuffers(buffers) {
 
 function doneEncoding(soundBlob) {
     // fetch('/audio', {method: "POST", body: soundBlob}).then(response => $('#output').text(response.text()))
+    //TODO ugly AF make sure fetch is pretty await most of this code should not be in fetch request
     fetch('/audio', {method: "POST", body: soundBlob}).then(response => response.json().then(text => {
         document.getElementById('output').value = text.transcribe;
         document.getElementById("audioObj").src = text.audioPath
+
+        document.getElementById('start').removeAttribute('disabled');
+        recIndex++;
+        document.getElementById('turn').innerHTML = "Turn: " + recIndex;
+        if(recIndex==MAXLENGTH){window.location = window.location.origin+"/downloadSession";} 
     }));
-    recIndex++;
-    document.getElementById('turn').innerHTML = "Turn: " + recIndex;
-    if(recIndex==MAXLENGTH){console.log("change"); window.location = window.location.origin+"/downloadSession";} 
+    
 }
 
 function stopRecording() {
     // stop recording
     audioRecorder.stop();
     document.getElementById('stop').disabled = true;
-    document.getElementById('start').removeAttribute('disabled');
     audioRecorder.getBuffers(gotBuffers);
+
 }
 
 function startRecording() {
@@ -180,27 +184,9 @@ function initAudio() {
 window.addEventListener('load', initAudio);
 
 function unpause() {
-    getLocalStream();
     document.getElementById('init').style.display = 'none';
     audioContext.resume().then(() => {
         console.log('Playback resumed successfully');
     });
     
 }
-
-function getLocalStream() {
-    console.log("falksj");
-    /*navigator.mediaDevices
-      .getUserMedia({ video: false, audio: true })
-      .then((stream) => {
-        window.localStream = stream;
-        window.localAudio.srcObject = stream;
-        window.localAudio.autoplay = true;
-        console.log("triedthis");
-      })
-      .catch((err) => {
-        console.error(`you got an error: ${err}`);
-      });*/
-  }
-  
-  
