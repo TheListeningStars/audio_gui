@@ -86,4 +86,4 @@ def downloadSession():
 
 if __name__ == "__main__":
     #app.logger = logging.getLogger('audio-gui')
-    app.run(debug = True, ssl_context = ("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
+    app.run(debug = True)
