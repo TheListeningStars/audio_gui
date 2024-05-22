@@ -5,7 +5,7 @@ import os
 from flask_session import Session
 from openai import OpenAI
 from utils import text_to_wav, saveAllAudio
-
+import openai
 
 
 
@@ -18,8 +18,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-
-client = OpenAI()
+openai.api_key=os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
 
 with open("prompt.txt", "r") as file:
     system_msg = file.read()

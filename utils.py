@@ -6,9 +6,6 @@ import os
 from pydub import AudioSegment
 import json
 
-from dotenv import load_dotenv, find_dotenv
-_ = load_dotenv(find_dotenv())
-
 openai.api_key=os.getenv("OPENAI_API_KEY")
 
 def text_to_wav(voice_name: str, text: str, filename: str):
