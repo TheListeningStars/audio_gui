@@ -16,7 +16,17 @@ MAXLENGTH = 2
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_REDIS'] = Redis.from_url(os.getenv("KV_URL"))
+#app.config['SESSION_REDIS'] = Redis()
+
+
+redis_url = os.environ.get('KV_URL')
+
+if redis_url.startswith('redis://'):
+    redis_url = 'rediss://' + redis_url[len('redis://'):]
+    print(redis_url)
+print(redis_url)
+print("-------------")
+app.config['SESSION_REDIS'] = Redis.from_url(redis_url)
 
 
 
@@ -91,5 +101,5 @@ def downloadSession():
 
 
 if __name__ == "__main__":
-    app.run(host = "0.0.0.0", port = 6942, debug=True, ssl_context = ("./SSLInfo/cert.pem", "./SSLInfo/key.pem"))
-    #app.run(debug = True)
+    #app.run(host = "0.0.0.0", port = 6942, debug=True, ssl_context = ("./SSLInfo/cert.pem", "./SSLInfo/key.pem"))
+    app.run(debug = True)
