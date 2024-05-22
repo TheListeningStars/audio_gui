@@ -9,6 +9,7 @@ from utils import text_to_wav, saveAllAudio
 
 
 
+
 MAXLENGTH = 2
 
 app = Flask(__name__)
@@ -84,7 +85,6 @@ def downloadSession():
     return send_file(path, as_attachment=True)
 
 
-'''if __name__ == "__main__":
+if __name__ == "__main__":
     #app.logger = logging.getLogger('audio-gui')
-    app.run(debug=True, ssl_context=("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
-    #app.run(port = 4200, debug=True)'''
+    app.run(debug = True, ssl_context = ("./SSLInfo/cert.pem","./SSLInfo/key.pem"))
