@@ -1,4 +1,5 @@
 #THIS IS THE FINAL WORKING VERSION
+#helloworld
 import marvin
 from flask import Flask, render_template, request, send_from_directory, send_file, redirect, session
 import os
@@ -6,7 +7,7 @@ from flask_session import Session
 from openai import OpenAI
 from utils import text_to_wav, saveAllAudio
 import openai
-
+from redis import Redis
 
 
 
@@ -14,7 +15,11 @@ MAXLENGTH = 2
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_REDIS'] = Redis.from_url(os.getenv("KV_URL"))
+
+
+
 Session(app)
 
 
@@ -86,5 +91,5 @@ def downloadSession():
 
 
 if __name__ == "__main__":
-    #app.logger = logging.getLogger('audio-gui')
-    app.run(debug = True)
+    app.run(host = "0.0.0.0", port = 6942, debug=True, ssl_context = ("./SSLInfo/cert.pem", "./SSLInfo/key.pem"))
+    #app.run(debug = True)
