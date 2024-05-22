@@ -1,5 +1,4 @@
 #PEM PASS PHRASE HELLOW WORLD
-from subprocess import run, PIPE
 import marvin
 from flask import Flask, render_template, request, send_from_directory, send_file, redirect, session
 import os
@@ -10,8 +9,6 @@ import time
 
 
 from flask import Flask
-
-
 
 
 MAXLENGTH = 2
@@ -71,8 +68,6 @@ def audio():
     reply = client.chat.completions.create(model="gpt-3.5-turbo",
                                                 messages=session["messages"]).choices[0].message.content
     session["messages"].append({"role": "assistant", "content": reply})
-
-    
     text_to_wav("es-ES-Standard-A",reply, f'./recordings/{session["name"]}/AI-{session["turn"]}.wav')
 
 

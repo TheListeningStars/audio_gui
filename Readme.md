@@ -1,4 +1,4 @@
-# Simple audio recorder demo
+# Reqs.txt missing
 
 This simple little project records audio in the the browser and sends the resulting WAV file to the server written in Python
 (using the Flask library) where it can be fruther processed and its results displayed on screen.
